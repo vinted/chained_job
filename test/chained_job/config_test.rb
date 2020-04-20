@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'chained_job/config'
+require 'mock_redis'
 require 'minitest/autorun'
 
 class ChainedJob::ConfigTest < Minitest::Test
@@ -12,23 +13,35 @@ class ChainedJob::ConfigTest < Minitest::Test
     assert_equal 1_000, default_config.arguments_batch_size
   end
 
+  def test_default_redis_configuration
+    assert_raises(ChainedJob::ConfigurationError, 'Redis is not configured') do
+      ChainedJob.redis
+    end
+  end
+
   def test_configure
     ChainedJob.configure do |config|
       config.debug = false
       config.arguments_batch_size = 2_000
+      config.redis = redis_config
     end
 
     assert_equal false, ChainedJob.config.debug
     assert_equal 2_000, ChainedJob.config.arguments_batch_size
+    assert_equal redis_config, ChainedJob.redis
   end
 
   private
 
-  def default_config
-    @default_config ||= tested_class.new
+  def setup
+    ChainedJob.instance_variable_set(:@config, nil)
   end
 
-  def tested_class
-    ChainedJob::Config
+  def default_config
+    @default_config ||= ChainedJob::Config.new
+  end
+
+  def redis_config
+    @redis_config ||= MockRedis.new
   end
 end

@@ -15,9 +15,10 @@ Gem::Specification.new do |spec|
   spec.executables   = Dir.glob('bin/**/*').map { |path| path.gsub('bin/', '') }
   spec.require_paths = ['lib']
 
+  spec.add_development_dependency 'redis', '>= 4'
+
   spec.add_development_dependency 'bundler', '~> 1.17'
   spec.add_development_dependency 'minitest', '~> 5.0'
   spec.add_development_dependency 'rake', '~> 12.0'
   spec.add_development_dependency 'rubocop-vinted', '~> 0.3'
 end
-
