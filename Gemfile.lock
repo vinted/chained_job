@@ -15,7 +15,6 @@ GEM
       ast (~> 2.4.0)
     rainbow (3.0.0)
     rake (12.3.3)
-    redis (4.1.3)
     rubocop (0.78.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
@@ -40,7 +39,6 @@ DEPENDENCIES
   minitest (~> 5.0)
   mock_redis
   rake (~> 12.0)
-  redis (>= 4)
   rubocop-vinted (~> 0.3)
 
 BUNDLED WITH
