@@ -13,6 +13,10 @@ class ChainedJob::ConfigTest < Minitest::Test
     assert_equal 1_000, default_config.arguments_batch_size
   end
 
+  def test_default_arguments_queue_expiration
+    assert_equal 604_800, default_config.arguments_queue_expiration
+  end
+
   def test_default_redis_configuration
     assert_raises(ChainedJob::ConfigurationError, 'Redis is not configured') do
       ChainedJob.redis
@@ -27,11 +31,13 @@ class ChainedJob::ConfigTest < Minitest::Test
     ChainedJob.configure do |config|
       config.debug = false
       config.arguments_batch_size = 2_000
+      config.arguments_queue_expiration = 1_209_600
       config.redis = redis_config
     end
 
     assert_equal false, ChainedJob.config.debug
     assert_equal 2_000, ChainedJob.config.arguments_batch_size
+    assert_equal 1_209_600, ChainedJob.config.arguments_queue_expiration
     assert_equal redis_config, ChainedJob.redis
   end
 

@@ -5,9 +5,11 @@ require 'logger'
 module ChainedJob
   class Config
     DEFAULT_ARGUMENTS_BATCH_SIZE = 1_000
+    DEFAULT_ARGUMENTS_QUEUE_EXPIRATION = 7 * 24 * 60 * 60 # 7 days
 
     attr_accessor(
       :arguments_batch_size,
+      :arguments_queue_expiration,
       :debug,
       :logger,
       :redis,
@@ -15,6 +17,7 @@ module ChainedJob
 
     def initialize
       self.arguments_batch_size = DEFAULT_ARGUMENTS_BATCH_SIZE
+      self.arguments_queue_expiration = DEFAULT_ARGUMENTS_QUEUE_EXPIRATION
 
       self.logger = ::Logger.new(STDOUT)
 
