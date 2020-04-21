@@ -9,6 +9,7 @@ GEM
     ast (2.4.0)
     jaro_winkler (1.5.4)
     minitest (5.14.0)
+    mock_redis (0.22.0)
     parallel (1.19.1)
     parser (2.7.0.2)
       ast (~> 2.4.0)
@@ -36,6 +37,7 @@ DEPENDENCIES
   bundler (~> 1.17)
   chained_job!
   minitest (~> 5.0)
+  mock_redis
   rake (~> 12.0)
   rubocop-vinted (~> 0.3)
 

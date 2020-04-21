@@ -7,6 +7,7 @@ module ChainedJob
     attr_accessor(
       :arguments_batch_size,
       :debug,
+      :redis,
     )
 
     def initialize
