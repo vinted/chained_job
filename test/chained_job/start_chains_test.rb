@@ -36,6 +36,10 @@ class ChainedJob::StartChainsTest < Minitest::Test
     end
   end
 
+  def teardown
+    ChainedJob.instance_variable_set(:@config, nil)
+  end
+
   def mock_class
     @mock_class ||= MiniTest::Mock.new
   end
