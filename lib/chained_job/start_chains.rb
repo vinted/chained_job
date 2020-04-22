@@ -48,7 +48,7 @@ module ChainedJob
     end
 
     def redis_key
-      "chained_job:#{job_class}"
+      Helpers.redis_key(job_class)
     end
 
     def config
