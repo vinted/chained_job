@@ -2,14 +2,14 @@
 
 module ChainedJob
   class StartChains
-    def self.run(target_class, array_of_job_arguments, parallelism)
-      new(target_class, array_of_job_arguments, parallelism).run
+    def self.run(job_class, array_of_job_arguments, parallelism)
+      new(job_class, array_of_job_arguments, parallelism).run
     end
 
-    attr_reader :target_class, :array_of_job_arguments, :parallelism
+    attr_reader :job_class, :array_of_job_arguments, :parallelism
 
-    def initialize(target_class, array_of_job_arguments, parallelism)
-      @target_class = target_class
+    def initialize(job_class, array_of_job_arguments, parallelism)
+      @job_class = job_class
       @array_of_job_arguments = array_of_job_arguments
       @parallelism = parallelism
     end
@@ -21,7 +21,7 @@ module ChainedJob
 
       store_job_arguments
 
-      parallelism.times { |worked_id| target_class.perform_later(worked_id) }
+      parallelism.times { |worked_id| job_class.perform_later(worked_id) }
     end
 
     private
@@ -39,7 +39,7 @@ module ChainedJob
     end
 
     def redis_key
-      "chained_job:#{target_class}"
+      "chained_job:#{job_class}"
     end
 
     def config
