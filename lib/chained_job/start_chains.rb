@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'chained_job/helpers'
+
 module ChainedJob
   class StartChains
     def self.run(job_class, array_of_job_arguments, parallelism)

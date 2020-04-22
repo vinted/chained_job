@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'chained_job/helpers'
+
 module ChainedJob
   class Process
     def self.run(job_instance, worker_id)
