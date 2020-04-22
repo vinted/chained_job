@@ -14,13 +14,19 @@ module ChainedJob
     end
 
     def run
-      return unless argument
+      return log_finished_worker unless argument
 
       job_instance.process(argument)
       job_instance.class.perform_later(worker_id)
     end
 
     private
+
+    def log_finished_worker
+      ChainedJob.logger.info(
+        "#{job_instance.class} worker #{worker_id} finished"
+      )
+    end
 
     def argument
       @argument ||= ChainedJob.redis.lpop(redis_key)

@@ -19,6 +19,7 @@ class ChainedJob::ProcessTest < Minitest::Test
     redis.lpop(redis_key)
 
     job_instance.expect(:class, job_class, [])
+    job_instance.expect(:class, job_class, [])
     tested_class.run(job_instance, 1)
 
     job_instance.verify

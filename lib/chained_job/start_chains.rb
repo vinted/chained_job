@@ -21,6 +21,8 @@ module ChainedJob
 
       store_job_arguments
 
+      log_chained_job_start
+
       parallelism.times { |worked_id| job_class.perform_later(worked_id) }
     end
 
@@ -32,6 +34,13 @@ module ChainedJob
       end
 
       redis.expire(redis_key, config.arguments_queue_expiration)
+    end
+
+    def log_chained_job_start
+      ChainedJob.logger.info(
+        "#{job_class} starting #{parallelism} workers "\
+        "processing #{array_of_job_arguments.count} items"
+      )
     end
 
     def redis
