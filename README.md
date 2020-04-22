@@ -1,6 +1,6 @@
 # ChainedJob
 
-The library provides ability start to chained background jobs.
+The library provides ability to use chained background jobs.
 
 ## Installation
 
