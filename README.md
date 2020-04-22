@@ -21,7 +21,7 @@ Or install the gem yourself:
 
 ## How it works
 
-`chained_job` stores background job arguments array into Redis and starts processing them in parallel in number of workers provided.
+`chained_job` stores background job arguments array in Redis and starts processing them in parallel by number of workers provided.
 
 Job re-enqueues itself until there are no more stored arguments in Redis for that specific job.
 
