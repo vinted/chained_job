@@ -2,24 +2,32 @@
 
 module ChainedJob
   class Process
-    def self.run(target, worked_id)
-      new(target, worked_id).run
+    def self.run(object, worker_id)
+      new(object, worker_id).run
     end
 
-    attr_reader :target, :worked_id
+    attr_reader :object, :worker_id
 
-    def initialize(target, worked_id)
-      @target = target
-      @worked_id = worked_id
+    def initialize(object, worker_id)
+      @object = object
+      @worker_id = worker_id
     end
 
     def run
-      # get arg from redis
-      # return if arg is nil
-      # else start process:
-      # target.process(2)
-      # start another job:
-      # target.class.perform_later(worked_id)
+      return unless argument
+
+      object.process(argument)
+      object.class.perform_later(worker_id)
+    end
+
+    private
+
+    def argument
+      @argument ||= ChainedJob.redis.lpop(redis_key)
+    end
+
+    def redis_key
+      "chained_job:#{object.class}"
     end
   end
 end

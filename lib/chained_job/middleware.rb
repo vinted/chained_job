@@ -5,9 +5,9 @@ require 'chained_job/process'
 
 module ChainedJob
   module Middleware
-    def perform(worked_id = nil)
-      if worked_id
-        ChainedJob::Process.run(self, worked_id)
+    def perform(worker_id = nil)
+      if worker_id
+        ChainedJob::Process.run(self, worker_id)
       else
         ChainedJob::StartChains.run(self.class, array_of_job_arguments, parallelism)
       end
