@@ -2,22 +2,22 @@
 
 module ChainedJob
   class Process
-    def self.run(object, worker_id)
-      new(object, worker_id).run
+    def self.run(job_instance, worker_id)
+      new(job_instance, worker_id).run
     end
 
-    attr_reader :object, :worker_id
+    attr_reader :job_instance, :worker_id
 
-    def initialize(object, worker_id)
-      @object = object
+    def initialize(job_instance, worker_id)
+      @job_instance = job_instance
       @worker_id = worker_id
     end
 
     def run
       return unless argument
 
-      object.process(argument)
-      object.class.perform_later(worker_id)
+      job_instance.process(argument)
+      job_instance.class.perform_later(worker_id)
     end
 
     private
@@ -27,7 +27,7 @@ module ChainedJob
     end
 
     def redis_key
-      "chained_job:#{object.class}"
+      "chained_job:#{job_instance.class}"
     end
   end
 end

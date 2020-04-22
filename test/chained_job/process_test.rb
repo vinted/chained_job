@@ -4,24 +4,24 @@ require 'mock_redis'
 require 'minitest/autorun'
 
 class ChainedJob::ProcessTest < Minitest::Test
-  def test_process_chai
-    mock_class.expect(:class, klass, [])
-    mock_class.expect(:process, nil, ['1'])
-    mock_class.expect(:class, klass, [])
-    klass.expect(:perform_later, nil, [1])
+  def test_process_chain
+    job_instance.expect(:class, job_class, [])
+    job_instance.expect(:process, nil, ['1'])
+    job_instance.expect(:class, job_class, [])
+    job_class.expect(:perform_later, nil, [1])
 
-    tested_class.run(mock_class, 1)
+    tested_class.run(job_instance, 1)
 
-    mock_class.verify
+    job_instance.verify
   end
 
   def test_empty_arguments_queue
     redis.lpop(redis_key)
 
-    mock_class.expect(:class, klass, [])
-    tested_class.run(mock_class, 1)
+    job_instance.expect(:class, job_class, [])
+    tested_class.run(job_instance, 1)
 
-    mock_class.verify
+    job_instance.verify
   end
 
   private
@@ -38,8 +38,8 @@ class ChainedJob::ProcessTest < Minitest::Test
     ChainedJob.instance_variable_set(:@config, nil)
   end
 
-  def mock_class
-    @mock_class ||= MiniTest::Mock.new
+  def job_instance
+    @job_instance ||= MiniTest::Mock.new
   end
 
   def redis
@@ -47,11 +47,11 @@ class ChainedJob::ProcessTest < Minitest::Test
   end
 
   def redis_key
-    "chained_job:#{klass}"
+    "chained_job:#{job_class}"
   end
 
-  def klass
-    @klass ||= MiniTest::Mock.new
+  def job_class
+    @job_class ||= MiniTest::Mock.new
   end
 
   def tested_class
