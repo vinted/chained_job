@@ -14,6 +14,10 @@ module ChainedJob
     config.redis || raise(ConfigurationError, 'Redis is not configured')
   end
 
+  def logger
+    config.logger
+  end
+
   def config
     @config ||= ChainedJob::Config.new
   end
