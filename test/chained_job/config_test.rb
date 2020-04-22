@@ -19,6 +19,10 @@ class ChainedJob::ConfigTest < Minitest::Test
     end
   end
 
+  def test_default_logger
+    assert_kind_of ::Logger, default_config.logger
+  end
+
   def test_configure
     ChainedJob.configure do |config|
       config.debug = false
