@@ -10,6 +10,8 @@ module ChainedJob
     attr_accessor(
       :arguments_batch_size,
       :arguments_queue_expiration,
+      :around_start_chains,
+      :around_chain_process,
       :debug,
       :logger,
       :redis,
@@ -20,6 +22,9 @@ module ChainedJob
       self.arguments_queue_expiration = DEFAULT_ARGUMENTS_QUEUE_EXPIRATION
 
       self.logger = ::Logger.new(STDOUT)
+
+      self.around_start_chains = ->(_job_class, &block) { block.call }
+      self.around_chain_process = ->(_job_class, &block) { block.call }
 
       self.debug = true
     end
