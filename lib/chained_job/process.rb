@@ -27,7 +27,7 @@ module ChainedJob
     end
 
     def redis_key
-      "chained_job:#{job_instance.class}"
+      Helpers.redis_key(job_instance.class)
     end
   end
 end
