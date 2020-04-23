@@ -44,6 +44,40 @@ ChainedJob.configure do |config|
 end
 ```
 
+#### Custom Hooks
+
+There are two types of hooks: `around_start_chains` and `around_chain_process` as lambda functions. Both of the hooks gets `options` hash.
+
+For `around_start_chains` callback `options` hash contains three keys:
+
+```ruby
+{
+  job_class: CheckUsersActivityJob,
+  array_of_job_arguments: [1, 2 ,3],
+  parallelism: 2,
+}
+```
+
+For `around_chain_process`:
+```ruby
+{
+  job_class: CheckUsersActivityJob,
+  worker_id: 2,
+}
+```
+
+You can configure callbacks:
+
+```ruby
+ChainedJob.configure do |config|
+  config.around_start_chains = ->(options, &block) do
+    time = Benchmark.ms { block.call }
+
+    puts "It took #{time} to start the chains for #{options[:job_class]} job"
+  end
+end
+```
+
 ### Usage
 
 Example of creating new background ActiveJob:
