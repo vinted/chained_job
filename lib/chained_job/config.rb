@@ -23,8 +23,8 @@ module ChainedJob
 
       self.logger = ::Logger.new(STDOUT)
 
-      self.around_start_chains = ->(_job_class, &block) { block.call }
-      self.around_chain_process = ->(_job_class, &block) { block.call }
+      self.around_start_chains = ->(_options, &block) { block.call }
+      self.around_chain_process = ->(_options, &block) { block.call }
 
       self.debug = true
     end
