@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.homepage  = 'https://github.com/vinted/chained_job'
   spec.authors   = ['Mantas Kūjalis']
   spec.email     = ['mantas.kujalis@vinted.com']
-  spec.licenses  = ['Nonstandard']
+  spec.license   = 'MIT'
 
   spec.files         = Dir.glob('lib/**/*')
   spec.executables   = Dir.glob('bin/**/*').map { |path| path.gsub('bin/', '') }
