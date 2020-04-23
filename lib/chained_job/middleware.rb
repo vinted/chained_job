@@ -12,5 +12,13 @@ module ChainedJob
         ChainedJob::StartChains.run(self.class, array_of_job_arguments, parallelism)
       end
     end
+
+    def array_of_job_arguments
+      raise NoMethodError, 'undefined method array_of_job_arguments'
+    end
+
+    def parallelism
+      raise NoMethodError, 'undefined method parallelism'
+    end
   end
 end
