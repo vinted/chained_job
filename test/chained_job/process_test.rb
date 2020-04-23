@@ -4,10 +4,12 @@ require 'mock_redis'
 require 'minitest/autorun'
 
 class ChainedJob::ProcessTest < Minitest::Test
+  # rubocop:disable Metrics/AbcSize
   def test_process_chain
     job_instance.expect(:class, job_class, [])
-    job_instance.expect(:process, nil, ['1'])
     job_instance.expect(:class, job_class, [])
+    job_instance.expect(:class, job_class, [])
+    job_instance.expect(:process, nil, ['1'])
     job_class.expect(:perform_later, nil, [1])
 
     tested_class.run(job_instance, 1)
@@ -20,10 +22,12 @@ class ChainedJob::ProcessTest < Minitest::Test
 
     job_instance.expect(:class, job_class, [])
     job_instance.expect(:class, job_class, [])
+    job_instance.expect(:class, job_class, [])
     tested_class.run(job_instance, 1)
 
     job_instance.verify
   end
+  # rubocop:enable Metrics/AbcSize
 
   private
 
