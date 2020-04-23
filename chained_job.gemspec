@@ -7,8 +7,8 @@ Gem::Specification.new do |spec|
   spec.version   = ChainedJob::VERSION
   spec.summary   = 'Chained job helper'
   spec.homepage  = 'https://github.com/vinted/chained_job'
-  spec.authors   = ['Mantas Kūjalis']
-  spec.email     = ['mantas.kujalis@vinted.com']
+  spec.authors   = ['Mantas Kūjalis', 'Titas Norkūnas']
+  spec.email     = ['mantas.kujalis@vinted.com', 'titas@vinted.com']
   spec.license   = 'MIT'
 
   spec.files         = Dir.glob('lib/**/*')
