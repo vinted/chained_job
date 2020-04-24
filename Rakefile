@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 require 'bundler/gem_tasks'
-
-# Do not allow releases just yet
-Rake::Task['release'].clear
-
 require 'rake/testtask'
 
 Rake::TestTask.new(:test) do |task|
