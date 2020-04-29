@@ -20,7 +20,7 @@ module ChainedJob
       with_hooks do
         redis.del(redis_key)
 
-        return unless array_of_job_arguments.count.positive?
+        next unless array_of_job_arguments.count.positive?
 
         store_job_arguments
 
