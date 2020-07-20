@@ -20,10 +20,10 @@ module ChainedJob
       set_tag_list
 
       array_of_job_arguments.each_slice(config.arguments_batch_size) do |sublist|
-        redis.rpush(redis_key(job_tag), sublist)
+        redis.rpush(redis_key, sublist)
       end
 
-      redis.expire(redis_key(job_tag), config.arguments_queue_expiration)
+      redis.expire(redis_key, config.arguments_queue_expiration)
     end
 
     private
@@ -36,7 +36,7 @@ module ChainedJob
       Helpers.tag_list(job_key)
     end
 
-    def redis_key(job_tag)
+    def redis_key
       @redis_key ||= Helpers.redis_key(job_key, job_tag)
     end
 
