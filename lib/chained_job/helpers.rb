@@ -9,7 +9,7 @@ module ChainedJob
     end
 
     def redis_key(key, tag)
-      "#{key}:#{tag}"
+      "chained_job:#{key}:#{tag}"
     end
 
     def tag_list(prefix)

@@ -45,7 +45,7 @@ module ChainedJob
     end
 
     def redis_key
-      Helpers.redis_key(job_instance.class)
+      Helpers.redis_key(job_instance.class, job_tag)
     end
   end
 end
