@@ -7,28 +7,49 @@ class ChainedJob::StartChainsTest < Minitest::Test
   ARRAY_OF_JOB_ARGUMENTS = %w(1 2 3).freeze
 
   def test_start_chains
-    job_class.expect(:perform_later, nil, [0])
-    job_class.expect(:perform_later, nil, [1])
+    job_tag = current_time.to_f.to_s
 
-    tested_class.run(job_class, ARRAY_OF_JOB_ARGUMENTS, 2)
+    with_frozen_time(current_time) do
+      job_class.expect(:perform_later, nil, [0, job_tag])
+      job_class.expect(:perform_later, nil, [1, job_tag])
 
-    job_class.verify
+      tested_class.run(job_class, ARRAY_OF_JOB_ARGUMENTS, 2)
+
+      job_class.verify
+    end
   end
 
   def test_redis_store
-    job_class.expect(:perform_later, nil, [0])
+    job_tag = current_time.to_f.to_s
 
-    tested_class.run(job_class, ARRAY_OF_JOB_ARGUMENTS, 1)
+    with_frozen_time(current_time) do
+      job_class.expect(:perform_later, nil, [0, job_tag])
 
-    assert_equal redis.lrange("chained_job:#{job_class}", 0, -1), ARRAY_OF_JOB_ARGUMENTS
-    job_class.verify
+      tested_class.run(job_class, ARRAY_OF_JOB_ARGUMENTS, 1)
+
+      assert_equal(
+        redis.lrange("chained_job:#{job_class}:#{job_tag}", 0, -1), ARRAY_OF_JOB_ARGUMENTS
+      )
+
+      job_class.verify
+    end
   end
 
   def test_empty_array_of_job_arguments
-    tested_class.run(job_class, [], 1)
+    with_frozen_time(current_time) do
+      tested_class.run(job_class, [], 1)
+    end
   end
 
   private
+
+  def with_frozen_time(time)
+    Time.stub(:now, time) { yield }
+  end
+
+  def current_time
+    @current_time ||= Time.now
+  end
 
   def setup
     ChainedJob.configure do |config|
