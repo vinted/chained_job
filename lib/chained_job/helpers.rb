@@ -12,8 +12,8 @@ module ChainedJob
       "chained_job:#{key}:#{tag}"
     end
 
-    def tag_list(prefix)
-      "#{prefix}:tags"
+    def tag_list(job_class)
+      "#{job_class}:tags"
     end
   end
 end
