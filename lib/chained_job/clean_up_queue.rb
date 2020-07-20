@@ -18,14 +18,15 @@ module ChainedJob
 
     def run
       loop do
-        tag = redis.spop(tag_list)
+        tag = ChainedJob.redis.spop(tag_list)
 
         break unless tag
 
         redis_key = Helpers.redis_key(job_key, tag)
-        size = redis.llen(redis_key)
-        (size / TRIM_STEP_SIZE).times { redis.ltrim(redis_key, 0, -TRIM_STEP_SIZE) }
-        redis.del(redis_key)
+        size = ChainedJob.redis.llen(redis_key)
+        (size / TRIM_STEP_SIZE).times { ChainedJob.redis.ltrim(redis_key, 0, -TRIM_STEP_SIZE) }
+
+        ChainedJob.redis.del(redis_key)
       end
     end
 
@@ -37,10 +38,6 @@ module ChainedJob
 
     def job_key
       @job_key ||= Helpers.job_key(job_class)
-    end
-
-    def redis
-      ChainedJob.redis
     end
   end
 end
