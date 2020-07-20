@@ -17,7 +17,7 @@ module ChainedJob
     end
 
     def run
-      redis.sadd(tag_list, job_tag)
+      update_tag_list
 
       array_of_job_arguments.each_slice(config.arguments_batch_size) do |sublist|
         redis.rpush(redis_key(job_tag), sublist)
@@ -27,6 +27,10 @@ module ChainedJob
     end
 
     private
+
+    def update_tag_list
+      redis.sadd(tag_list, job_tag)
+    end
 
     def tag_list
       Helpers.tag_list(job_key)
