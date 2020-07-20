@@ -8,8 +8,8 @@ module ChainedJob
       "chained_job:#{job_class}"
     end
 
-    def redis_key(key, tag)
-      "chained_job:#{key}:#{tag}"
+    def redis_key(job_key, tag)
+      "#{job_key}:#{tag}"
     end
 
     def tag_list(prefix)

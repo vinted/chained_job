@@ -13,6 +13,7 @@ module ChainedJob
     def initialize(job_instance, worker_id, job_tag)
       @job_instance = job_instance
       @worker_id = worker_id
+      @job_tag = job_tag
     end
 
     def run
@@ -45,7 +46,11 @@ module ChainedJob
     end
 
     def redis_key
-      Helpers.redis_key(job_instance.class, job_tag)
+      Helpers.redis_key(job_key, job_tag)
+    end
+
+    def job_key
+      Helpers.job_key(job_instance.class)
     end
   end
 end
