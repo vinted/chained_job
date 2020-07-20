@@ -4,13 +4,13 @@ require 'chained_job/helpers'
 
 module ChainedJob
   class Process
-    def self.run(job_instance, worker_id)
-      new(job_instance, worker_id).run
+    def self.run(job_instance, worker_id, job_tag)
+      new(job_instance, worker_id, job_tag).run
     end
 
-    attr_reader :job_instance, :worker_id
+    attr_reader :job_instance, :worker_id, :job_tag
 
-    def initialize(job_instance, worker_id)
+    def initialize(job_instance, worker_id, job_tag)
       @job_instance = job_instance
       @worker_id = worker_id
     end
@@ -20,7 +20,7 @@ module ChainedJob
         return log_finished_worker unless argument
 
         job_instance.process(argument)
-        job_instance.class.perform_later(worker_id)
+        job_instance.class.perform_later(worker_id, job_tag)
       end
     end
 

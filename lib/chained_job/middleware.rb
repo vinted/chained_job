@@ -9,9 +9,9 @@ module ChainedJob
       base.queue_as ChainedJob.config.queue if ChainedJob.config.queue
     end
 
-    def perform(worker_id = nil)
+    def perform(worker_id = nil, tag = nil)
       if worker_id
-        ChainedJob::Process.run(self, worker_id)
+        ChainedJob::Process.run(self, worker_id, tag)
       else
         ChainedJob::StartChains.run(self.class, array_of_job_arguments, parallelism)
       end
