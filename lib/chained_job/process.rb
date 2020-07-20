@@ -36,7 +36,7 @@ module ChainedJob
 
     def log_finished_worker
       ChainedJob.logger.info(
-        "#{job_instance.class} worker #{worker_id} finished"
+        "#{job_instance.class}:#{job_tag} worker #{worker_id} finished"
       )
     end
 
