@@ -21,11 +21,11 @@ module ChainedJob
     # rubocop:disable Metrics/AbcSize
     def run
       with_hooks do
-        CleanUpQueue.run(job_class)
+        ChainedJob::CleanUpQueue.run(job_class)
 
         next unless array_of_job_arguments.count.positive?
 
-        StoreJobArguments.run(job_class, job_tag, array_of_job_arguments)
+        ChainedJob::StoreJobArguments.run(job_class, job_tag, array_of_job_arguments)
 
         log_chained_job_start
 
