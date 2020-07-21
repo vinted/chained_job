@@ -6,7 +6,7 @@ require 'chained_job/process'
 module ChainedJob
   module Middleware
     def self.included(base)
-      base.queue_as ChainedJob.config.queue
+      base.queue_as ChainedJob.config.queue if ChainedJob.config.queue
     end
 
     def perform(worker_id = nil)
