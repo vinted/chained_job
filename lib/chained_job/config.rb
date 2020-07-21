@@ -15,6 +15,7 @@ module ChainedJob
       :debug,
       :logger,
       :redis,
+      :queue,
     )
 
     def initialize

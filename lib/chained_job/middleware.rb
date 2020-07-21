@@ -5,6 +5,10 @@ require 'chained_job/process'
 
 module ChainedJob
   module Middleware
+    def self.included(base)
+      base.queue_as ChainedJob.config.queue
+    end
+
     def perform(worker_id = nil)
       if worker_id
         ChainedJob::Process.run(self, worker_id)
