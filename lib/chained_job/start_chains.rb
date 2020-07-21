@@ -18,6 +18,7 @@ module ChainedJob
       @parallelism = parallelism
     end
 
+    # rubocop:disable Metrics/AbcSize
     def run
       with_hooks do
         CleanUpQueue.run(job_class)
@@ -31,6 +32,7 @@ module ChainedJob
         parallelism.times { |worked_id| job_class.perform_later(worked_id, job_tag) }
       end
     end
+    # rubocop:enable Metrics/AbcSize
 
     private
 

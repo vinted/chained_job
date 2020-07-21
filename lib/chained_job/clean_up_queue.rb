@@ -16,6 +16,7 @@ module ChainedJob
       @job_class = job_class
     end
 
+    # rubocop:disable Metrics/AbcSize
     def run
       loop do
         tag = ChainedJob.redis.spop(tag_list)
@@ -29,6 +30,7 @@ module ChainedJob
         ChainedJob.redis.del(redis_key)
       end
     end
+    # rubocop:enable Metrics/AbcSize
 
     private
 

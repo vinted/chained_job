@@ -5,6 +5,7 @@ require 'minitest/autorun'
 class ChainedJob::CleanUpQueueTest < Minitest::Test
   ARRAY_OF_JOB_ARGUMENTS = %w(1 2 3).freeze
 
+  # rubocop:disable Metrics/AbcSize
   def test_queue_clean_up
     assert_equal(redis.lrange(redis_key(job_tag_1), 0, -1), ARRAY_OF_JOB_ARGUMENTS)
     assert_equal(redis.lrange(redis_key(job_tag_2), 0, -1), ARRAY_OF_JOB_ARGUMENTS)
@@ -14,6 +15,7 @@ class ChainedJob::CleanUpQueueTest < Minitest::Test
     assert_equal(redis.lrange(redis_key(job_tag_1), 0, -1), [])
     assert_equal(redis.lrange(redis_key(job_tag_2), 0, -1), [])
   end
+  # rubocop:enable Metrics/AbcSize
 
   private
 
@@ -46,18 +48,29 @@ class ChainedJob::CleanUpQueueTest < Minitest::Test
   end
 
   def setup
+    setup_redis
+    setup_tag_list
+    setup_arguments_queue
+  end
+
+  def setup_redis
     ChainedJob.configure do |config|
       config.redis = redis
     end
-
-    redis.sadd(tag_list, job_tag_1)
-    redis.sadd(tag_list, job_tag_2)
-    redis.rpush(redis_key(job_tag_1), ARRAY_OF_JOB_ARGUMENTS)
-    redis.rpush(redis_key(job_tag_2), ARRAY_OF_JOB_ARGUMENTS)
   end
 
   def redis
     @redis ||= MockRedis.new
+  end
+
+  def setup_tag_list
+    redis.sadd(tag_list, job_tag_1)
+    redis.sadd(tag_list, job_tag_2)
+  end
+
+  def setup_arguments_queue
+    redis.rpush(redis_key(job_tag_1), ARRAY_OF_JOB_ARGUMENTS)
+    redis.rpush(redis_key(job_tag_2), ARRAY_OF_JOB_ARGUMENTS)
   end
 
   def teardown
