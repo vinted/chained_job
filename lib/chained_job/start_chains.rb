@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'chained_job/helpers'
+require 'chained_job/clean_up_queue'
+require 'chained_job/store_job_arguments'
 
 module ChainedJob
   class StartChains
@@ -16,19 +18,21 @@ module ChainedJob
       @parallelism = parallelism
     end
 
+    # rubocop:disable Metrics/AbcSize
     def run
       with_hooks do
-        redis.del(redis_key)
+        ChainedJob::CleanUpQueue.run(job_class)
 
         next unless array_of_job_arguments.count.positive?
 
-        store_job_arguments
+        ChainedJob::StoreJobArguments.run(job_class, job_tag, array_of_job_arguments)
 
         log_chained_job_start
 
-        parallelism.times { |worked_id| job_class.perform_later(worked_id) }
+        parallelism.times { |worked_id| job_class.perform_later(worked_id, job_tag) }
       end
     end
+    # rubocop:enable Metrics/AbcSize
 
     private
 
@@ -44,31 +48,15 @@ module ChainedJob
       }
     end
 
-    def store_job_arguments
-      array_of_job_arguments.each_slice(config.arguments_batch_size) do |sublist|
-        redis.rpush(redis_key, sublist)
-      end
-
-      redis.expire(redis_key, config.arguments_queue_expiration)
+    def job_tag
+      @job_tag ||= Time.now.to_f.to_s
     end
 
     def log_chained_job_start
       ChainedJob.logger.info(
-        "#{job_class} starting #{parallelism} workers "\
+        "#{job_class}:#{job_tag} starting #{parallelism} workers "\
         "processing #{array_of_job_arguments.count} items"
       )
-    end
-
-    def redis
-      ChainedJob.redis
-    end
-
-    def redis_key
-      Helpers.redis_key(job_class)
-    end
-
-    def config
-      ChainedJob.config
     end
   end
 end

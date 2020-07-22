@@ -4,15 +4,17 @@ require 'mock_redis'
 require 'minitest/autorun'
 
 class ChainedJob::ProcessTest < Minitest::Test
+  DEFAULT_JOB_TAG = '1595253473.6297688'
+
   # rubocop:disable Metrics/AbcSize
   def test_process_chain
     job_instance.expect(:class, job_class, [])
     job_instance.expect(:class, job_class, [])
     job_instance.expect(:class, job_class, [])
     job_instance.expect(:process, nil, ['1'])
-    job_class.expect(:perform_later, nil, [1])
+    job_class.expect(:perform_later, nil, [1, DEFAULT_JOB_TAG])
 
-    tested_class.run(job_instance, 1)
+    tested_class.run(job_instance, 1, DEFAULT_JOB_TAG)
 
     job_instance.verify
   end
@@ -23,7 +25,7 @@ class ChainedJob::ProcessTest < Minitest::Test
     job_instance.expect(:class, job_class, [])
     job_instance.expect(:class, job_class, [])
     job_instance.expect(:class, job_class, [])
-    tested_class.run(job_instance, 1)
+    tested_class.run(job_instance, 1, DEFAULT_JOB_TAG)
 
     job_instance.verify
   end
@@ -52,7 +54,7 @@ class ChainedJob::ProcessTest < Minitest::Test
   end
 
   def redis_key
-    "chained_job:#{job_class}"
+    "chained_job:#{job_class}:#{DEFAULT_JOB_TAG}"
   end
 
   def job_class
