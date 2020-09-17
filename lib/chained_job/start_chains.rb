@@ -21,6 +21,8 @@ module ChainedJob
     # rubocop:disable Metrics/AbcSize
     def run
       with_hooks do
+        log_chained_job_cleanup
+
         ChainedJob::CleanUpQueue.run(job_class)
 
         next unless array_of_job_arguments.count.positive?
@@ -56,6 +58,12 @@ module ChainedJob
       ChainedJob.logger.info(
         "#{job_class}:#{job_tag} starting #{parallelism} workers "\
         "processing #{array_of_job_arguments.count} items"
+      )
+    end
+
+    def log_chained_job_cleanup
+      ChainedJob.logger.info(
+        "#{job_class}:#{job_tag} cleanup"
       )
     end
   end
