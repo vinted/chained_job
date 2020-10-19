@@ -31,4 +31,3 @@ module ChainedJob
     end
   end
 end
-
