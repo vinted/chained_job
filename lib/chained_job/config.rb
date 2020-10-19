@@ -12,6 +12,7 @@ module ChainedJob
       :arguments_queue_expiration,
       :around_start_chains,
       :around_chain_process,
+      :around_array_of_job_arguments,
       :debug,
       :logger,
       :redis,
@@ -26,6 +27,7 @@ module ChainedJob
 
       self.around_start_chains = ->(_options, &block) { block.call }
       self.around_chain_process = ->(_options, &block) { block.call }
+      self.around_array_of_job_arguments = ->(_options, &block) { block.call }
 
       self.debug = true
     end
