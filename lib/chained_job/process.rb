@@ -18,7 +18,7 @@ module ChainedJob
 
     def run
       with_hooks do
-        return log_finished_worker unless argument
+        return finished_worker unless argument
 
         job_instance.process(argument)
         job_instance.class.perform_later(worker_id, job_tag)
@@ -32,7 +32,13 @@ module ChainedJob
     end
 
     def options
-      { job_class: job_instance.class, worker_id: worker_id }
+      @options ||= { job_class: job_instance.class, worker_id: worker_id }
+    end
+
+    def finished_worker
+      log_finished_worker
+
+      ChainedJob.config.after_worker_finished&.call(options)
     end
 
     def log_finished_worker
