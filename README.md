@@ -25,6 +25,10 @@ Or install the gem yourself:
 
 Job re-enqueues itself until there are no more stored arguments in Redis for that specific job.
 
+A recorded learning session about chained jobs
+
+[![A recorded learning session about chained jobs](https://img.youtube.com/vi/HfHLSz4oV9w/0.jpg)](https://www.youtube.com/watch?v=HfHLSz4oV9w)
+
 ### Configuration
 
 ```ruby
