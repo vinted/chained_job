@@ -1,3 +1,0 @@
-inherit_gem:
-  rubocop-vinted:
-    - .rubocop.default.yml
