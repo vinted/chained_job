@@ -9,3 +9,7 @@ Rake::TestTask.new(:test) do |task|
 end
 
 task default: :test
+
+task :version do |t|
+  puts ChainedJob::VERSION
+end
