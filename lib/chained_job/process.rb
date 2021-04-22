@@ -48,7 +48,20 @@ module ChainedJob
     end
 
     def argument
-      @argument ||= ChainedJob.redis.lpop(redis_key)
+      @argument ||= deserialized_argument
+    end
+
+    def deserialized_argument
+      Marshal.load(serialized_argument)
+    rescue TypeError, ArgumentError
+      # backward compatibility
+      serialized_argument
+    end
+
+    def serialized_argument
+      return @serialized_argument if defined?(@serialized_argument)
+
+      @serialized_argument = ChainedJob.redis.lpop(redis_key)
     end
 
     def redis_key
