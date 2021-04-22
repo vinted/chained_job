@@ -52,10 +52,9 @@ module ChainedJob
     end
 
     def deserialized_argument
+      return unless serialized_argument
+
       Marshal.load(serialized_argument)
-    rescue TypeError, ArgumentError
-      # backward compatibility
-      serialized_argument
     end
 
     def serialized_argument
