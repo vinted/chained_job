@@ -8,7 +8,7 @@ class ChainedJob::StoreJobArgumentsTest < Minitest::Test
   def test_redis_store
     tested_class.run(job_class, job_tag, ARRAY_OF_JOB_ARGUMENTS)
 
-    assert_equal(redis.lrange(redis_key, 0, -1), ARRAY_OF_JOB_ARGUMENTS)
+    assert_equal(redis.lrange(redis_key, 0, -1), stored_job_arguments)
   end
 
   def test_set_tag_list
@@ -37,6 +37,10 @@ class ChainedJob::StoreJobArgumentsTest < Minitest::Test
 
   def job_tag
     current_time.to_f.to_s
+  end
+
+  def stored_job_arguments
+    ARRAY_OF_JOB_ARGUMENTS.map { |argument| Marshal.dump(argument) }
   end
 
   def redis_key
