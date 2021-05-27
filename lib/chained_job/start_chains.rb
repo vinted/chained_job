@@ -6,13 +6,14 @@ require 'chained_job/store_job_arguments'
 
 module ChainedJob
   class StartChains
-    def self.run(job_class, job_arguments_key, array_of_job_arguments, parallelism)
-      new(job_class, job_arguments_key, array_of_job_arguments, parallelism).run
+    def self.run(args, job_class, job_arguments_key, array_of_job_arguments, parallelism)
+      new(args, job_class, job_arguments_key, array_of_job_arguments, parallelism).run
     end
 
-    attr_reader :job_class, :job_arguments_key, :array_of_job_arguments, :parallelism
+    attr_reader :args, :job_class, :job_arguments_key, :array_of_job_arguments, :parallelism
 
-    def initialize(job_class, job_arguments_key, array_of_job_arguments, parallelism)
+    def initialize(args, job_class, job_arguments_key, array_of_job_arguments, parallelism)
+      @args = args
       @job_class = job_class
       @job_arguments_key = job_arguments_key
       @array_of_job_arguments = array_of_job_arguments
@@ -32,7 +33,7 @@ module ChainedJob
 
         log_chained_job_start
 
-        parallelism.times { |worked_id| job_class.perform_later(worked_id, job_tag) }
+        parallelism.times { |worked_id| job_class.perform_later(args, worked_id, job_tag) }
       end
     end
     # rubocop:enable Metrics/AbcSize

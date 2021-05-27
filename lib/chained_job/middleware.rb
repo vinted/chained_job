@@ -9,11 +9,15 @@ module ChainedJob
       base.queue_as ChainedJob.config.queue if ChainedJob.config.queue
     end
 
-    def perform(worker_id = nil, tag = nil)
+    def perform(args = {}, worker_id = nil, tag = nil)
+      unless Hash === args
+        # backward compatibility
+        args, worker_id, tag = {}, args, worker_id
+      end
       if worker_id
-        ChainedJob::Process.run(self, job_arguments_key, worker_id, tag)
+        ChainedJob::Process.run(args, self, job_arguments_key, worker_id, tag)
       else
-        ChainedJob::StartChains.run(self.class, job_arguments_key, arguments_array, parallelism)
+        ChainedJob::StartChains.run(args, self.class, job_arguments_key, arguments_array, parallelism)
       end
     end
 
