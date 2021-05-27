@@ -4,14 +4,15 @@ require 'chained_job/helpers'
 
 module ChainedJob
   class Process
-    def self.run(job_instance, worker_id, job_tag)
-      new(job_instance, worker_id, job_tag).run
+    def self.run(job_instance, job_arguments_key, worker_id, job_tag)
+      new(job_instance, job_arguments_key, worker_id, job_tag).run
     end
 
-    attr_reader :job_instance, :worker_id, :job_tag
+    attr_reader :job_instance, :job_arguments_key, :worker_id, :job_tag
 
-    def initialize(job_instance, worker_id, job_tag)
+    def initialize(job_instance, job_arguments_key, worker_id, job_tag)
       @job_instance = job_instance
+      @job_arguments_key = job_arguments_key
       @worker_id = worker_id
       @job_tag = job_tag
     end
@@ -68,7 +69,7 @@ module ChainedJob
     end
 
     def job_key
-      Helpers.job_key(job_instance.class)
+      Helpers.job_key(job_arguments_key)
     end
   end
 end

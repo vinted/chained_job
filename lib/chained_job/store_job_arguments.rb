@@ -4,14 +4,14 @@ require 'chained_job/helpers'
 
 module ChainedJob
   class StoreJobArguments
-    def self.run(job_class, job_tag, array_of_job_arguments)
-      new(job_class, job_tag, array_of_job_arguments).run
+    def self.run(job_arguments_key, job_tag, array_of_job_arguments)
+      new(job_arguments_key, job_tag, array_of_job_arguments).run
     end
 
-    attr_reader :job_class, :job_tag, :array_of_job_arguments
+    attr_reader :job_arguments_key, :job_tag, :array_of_job_arguments
 
-    def initialize(job_class, job_tag, array_of_job_arguments)
-      @job_class = job_class
+    def initialize(job_arguments_key, job_tag, array_of_job_arguments)
+      @job_arguments_key = job_arguments_key
       @job_tag = job_tag
       @array_of_job_arguments = array_of_job_arguments
     end
@@ -41,7 +41,7 @@ module ChainedJob
     end
 
     def job_key
-      @job_key ||= Helpers.job_key(job_class)
+      @job_key ||= Helpers.job_key(job_arguments_key)
     end
 
     def serialize(arguments)

@@ -11,9 +11,9 @@ module ChainedJob
 
     def perform(worker_id = nil, tag = nil)
       if worker_id
-        ChainedJob::Process.run(self, worker_id, tag)
+        ChainedJob::Process.run(self, job_arguments_key, worker_id, tag)
       else
-        ChainedJob::StartChains.run(self.class, arguments_array, parallelism)
+        ChainedJob::StartChains.run(self.class, job_arguments_key, arguments_array, parallelism)
       end
     end
 
@@ -28,6 +28,10 @@ module ChainedJob
 
     def parallelism
       raise NoMethodError, 'undefined method parallelism'
+    end
+
+    def job_arguments_key
+      self.class
     end
   end
 end
