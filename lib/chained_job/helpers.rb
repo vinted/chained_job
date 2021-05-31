@@ -4,8 +4,8 @@ module ChainedJob
   module Helpers
     module_function
 
-    def job_key(job_class)
-      "chained_job:#{job_class}"
+    def job_key(job_arguments_key)
+      "chained_job:#{job_arguments_key}"
     end
 
     def redis_key(job_key, tag)

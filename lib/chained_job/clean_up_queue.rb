@@ -4,16 +4,16 @@ require 'chained_job/helpers'
 
 module ChainedJob
   class CleanUpQueue
-    def self.run(job_class)
-      new(job_class).run
+    def self.run(job_arguments_key)
+      new(job_arguments_key).run
     end
 
     TRIM_STEP_SIZE = 1_000
 
-    attr_reader :job_class
+    attr_reader :job_arguments_key
 
-    def initialize(job_class)
-      @job_class = job_class
+    def initialize(job_arguments_key)
+      @job_arguments_key = job_arguments_key
     end
 
     # rubocop:disable Metrics/AbcSize
@@ -39,7 +39,7 @@ module ChainedJob
     end
 
     def job_key
-      @job_key ||= Helpers.job_key(job_class)
+      @job_key ||= Helpers.job_key(job_arguments_key)
     end
   end
 end

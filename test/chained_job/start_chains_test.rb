@@ -10,10 +10,10 @@ class ChainedJob::StartChainsTest < Minitest::Test
     job_tag = current_time.to_f.to_s
 
     with_frozen_time(current_time) do
-      job_class.expect(:perform_later, nil, [0, job_tag])
-      job_class.expect(:perform_later, nil, [1, job_tag])
+      job_class.expect(:perform_later, nil, [{}, 0, job_tag])
+      job_class.expect(:perform_later, nil, [{}, 1, job_tag])
 
-      tested_class.run(job_class, ARRAY_OF_JOB_ARGUMENTS, 2)
+      tested_class.run({}, job_class, job_class, ARRAY_OF_JOB_ARGUMENTS, 2)
 
       job_class.verify
     end
@@ -21,7 +21,7 @@ class ChainedJob::StartChainsTest < Minitest::Test
 
   def test_empty_array_of_job_arguments
     with_frozen_time(current_time) do
-      tested_class.run(job_class, [], 1)
+      tested_class.run({}, job_class, job_class, [], 1)
     end
   end
 

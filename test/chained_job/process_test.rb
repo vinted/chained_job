@@ -15,9 +15,9 @@ class ChainedJob::ProcessTest < Minitest::Test
     job_instance.expect(:class, job_class, [])
     job_instance.expect(:class, job_class, [])
     job_instance.expect(:process, nil, [1])
-    job_class.expect(:perform_later, nil, [1, DEFAULT_JOB_TAG])
+    job_class.expect(:perform_later, nil, [{}, 1, DEFAULT_JOB_TAG])
 
-    tested_class.run(job_instance, 1, DEFAULT_JOB_TAG)
+    tested_class.run({}, job_instance, job_instance.class, 1, DEFAULT_JOB_TAG)
 
     job_instance.verify
   end
@@ -26,7 +26,7 @@ class ChainedJob::ProcessTest < Minitest::Test
     job_instance.expect(:class, job_class, [])
     job_instance.expect(:class, job_class, [])
     job_instance.expect(:class, job_class, [])
-    tested_class.run(job_instance, 1, DEFAULT_JOB_TAG)
+    tested_class.run({}, job_instance, job_instance.class, 1, DEFAULT_JOB_TAG)
 
     job_instance.verify
   end
