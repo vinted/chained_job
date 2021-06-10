@@ -17,12 +17,12 @@ module ChainedJob
       if worker_id
         ChainedJob::Process.run(args, self, job_arguments_key, worker_id, tag)
       else
-        ChainedJob::StartChains.run(args, self.class, job_arguments_key, arguments_array, parallelism)
+        ChainedJob::StartChains.run(args, self.class, job_arguments_key, arguments_array(args), parallelism)
       end
     end
 
-    def arguments_array
-      options = { job_class: self.class }
+    def arguments_array(args)
+      options = { job_class: self.class, args: args }
       ChainedJob.config.around_array_of_job_arguments.call(options) { array_of_job_arguments }
     end
 
