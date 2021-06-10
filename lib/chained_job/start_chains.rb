@@ -49,7 +49,7 @@ module ChainedJob
         job_class: job_class,
         array_of_job_arguments: array_of_job_arguments,
         parallelism: parallelism,
-        args: @args,
+        args: args,
       }
     end
 
