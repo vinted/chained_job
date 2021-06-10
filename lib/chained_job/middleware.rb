@@ -14,6 +14,7 @@ module ChainedJob
         # backward compatibility
         args, worker_id, tag = {}, args, worker_id
       end
+      @args = args
       if worker_id
         ChainedJob::Process.run(args, self, job_arguments_key, worker_id, tag)
       else
@@ -22,7 +23,7 @@ module ChainedJob
     end
 
     def arguments_array
-      options = { job_class: self.class }
+      options = { job_class: self.class, args: @args }
       ChainedJob.config.around_array_of_job_arguments.call(options) { array_of_job_arguments }
     end
 

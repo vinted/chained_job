@@ -55,6 +55,7 @@ For `around_start_chains` callback `options` hash contains three keys:
   job_class: CheckUsersActivityJob,
   array_of_job_arguments: [1, 2 ,3],
   parallelism: 2,
+  args: [{"job_argument" => "value"}],
 }
 ```
 
@@ -63,6 +64,7 @@ For `around_chain_process`:
 {
   job_class: CheckUsersActivityJob,
   worker_id: 2,
+  args: [{"job_argument" => "value"}],
 }
 ```
 

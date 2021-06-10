@@ -34,7 +34,7 @@ module ChainedJob
     end
 
     def options
-      @options ||= { job_class: job_instance.class, worker_id: worker_id }
+      @options ||= { job_class: job_instance.class, worker_id: worker_id, args: @args }
     end
 
     def finished_worker
