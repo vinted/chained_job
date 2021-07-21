@@ -117,9 +117,8 @@ class CheckUsersActivityJob < ActiveJob::Base
 end
 ```
 
-### On Failure (Retry queue)
-In the case if one your chained worker fails to process - it will go into retry queue and restarts.
-However important to note, that args picked from Redis, are no longer available, and hence will not be processed.
+### On Failure (retry queue)
+In this case, if one of your chained workers fails to process some ids - it will go into the retry queue and restarts as you would expect. However important to note that args picked from Redis are no longer available, and hence those ids won't be processed anymore.
 
 ## Development
 
