@@ -117,6 +117,10 @@ class CheckUsersActivityJob < ActiveJob::Base
 end
 ```
 
+### On Failure (Retry queue)
+In the case if one your chained worker fails to process - it will go into retry queue and restarts.
+However important to note, that args picked from Redis, are no longer available, and hence will not be processed.
+
 ## Development
 
 For running tests use `bundle exec rake test`.
