@@ -19,36 +19,23 @@ module ChainedJob
     end
 
     def run
-      handle_retry ? process_with_retry : process
-    end
-
-    private
-
-    def handle_retry
-      job_instance.respond_to?(:handle_retry) && job_instance.handle_retry
-    end
-
-    def process
-      with_hooks do
-        return finished_worker unless argument
-
-        job_instance.process(argument)
-        job_instance.class.perform_later(args, worker_id, job_tag)
-      end
-    end
-
-    def process_with_retry
       with_hooks do
         return finished_worker unless argument
 
         begin
           job_instance.process(argument)
         rescue StandardError => e
-          repush_job_arguments_back
+          push_job_arguments_back if handle_retry?
           raise e
         end
         job_instance.class.perform_later(args, worker_id, job_tag)
       end
+    end
+
+    private
+
+    def handle_retry?
+      job_instance.respond_to?(:handle_retry) && job_instance.handle_retry
     end
 
     def with_hooks
@@ -95,7 +82,7 @@ module ChainedJob
       Helpers.job_key(job_arguments_key)
     end
 
-    def repush_job_arguments_back
+    def push_job_arguments_back
       ChainedJob.redis.rpush(redis_key, Helpers.serialize([argument]))
     end
   end
