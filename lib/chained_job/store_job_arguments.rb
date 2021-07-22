@@ -20,7 +20,7 @@ module ChainedJob
       set_tag_list
 
       array_of_job_arguments.each_slice(config.arguments_batch_size) do |sublist|
-        ChainedJob.redis.rpush(redis_key, serialize(sublist))
+        ChainedJob.redis.rpush(redis_key, Helpers.serialize(sublist))
       end
 
       ChainedJob.redis.expire(redis_key, config.arguments_queue_expiration)
@@ -42,10 +42,6 @@ module ChainedJob
 
     def job_key
       @job_key ||= Helpers.job_key(job_arguments_key)
-    end
-
-    def serialize(arguments)
-      arguments.map { |argument| Marshal.dump(argument) }
     end
 
     def config
