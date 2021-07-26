@@ -30,6 +30,59 @@ class ChainedJob::ProcessTest < Minitest::Test
 
     job_instance.verify
   end
+
+  def test_handle_retry_with_single_args
+    array_of_arguments = [101, 102]
+
+    redis.rpush(redis_key, ChainedJob::Helpers.serialize(array_of_arguments))
+
+    job_instance.expect(:class, job_class.to_s, [])
+    job_instance.expect(:class, job_class.to_s, [])
+
+    job_instance.expect(:process, 100) do
+      raise(RuntimeError, 'Service temporary timeout error')
+    end
+
+    job_instance.expect(:methods, ['handle_retry'])
+    job_instance.expect(:handle_retry, true)
+
+    assert_raises RuntimeError do
+      tested_class.run({}, job_instance, job_instance.class, 1, DEFAULT_JOB_TAG)
+    end
+
+    job_instance.verify
+
+    # arguments were set back to redis
+    args_redis = redis.lrange(redis_key, 0, -1).map {|e| Marshal.load(e) }
+    assert_equal(args_redis, array_of_arguments.reverse)
+  end
+
+  def test_handle_retry_with_args_of_array
+    array_of_arguments = [[1, 2], [3, 4]]
+
+    redis.rpush(redis_key, ChainedJob::Helpers.serialize(array_of_arguments))
+
+    job_instance.expect(:class, job_class.to_s, [])
+    job_instance.expect(:class, job_class.to_s, [])
+
+    job_instance.expect(:process, [1, 2]) do
+      raise(RuntimeError, 'Service temporary timeout error')
+    end
+
+    job_instance.expect(:methods, ['handle_retry'])
+    job_instance.expect(:handle_retry, true)
+
+    assert_raises RuntimeError do
+      tested_class.run({}, job_instance, job_instance.class, 1, DEFAULT_JOB_TAG)
+    end
+
+    job_instance.verify
+
+    # arguments were set back to redis
+    args_redis = redis.lrange(redis_key, 0, -1).map {|e| Marshal.load(e) }
+    assert_equal(args_redis, array_of_arguments.reverse)
+  end
+
   # rubocop:enable Metrics/AbcSize
 
   private
