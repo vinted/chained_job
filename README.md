@@ -120,6 +120,21 @@ end
 ### On Failure (retry queue)
 In this case, if one of your chained workers fails to process some ids - it will go into the retry queue and restarts as you would expect. However important to note that args picked from Redis are no longer available, and hence those ids won't be processed anymore.
 
+In case you want that during exception your arguments would be pushed back to Redis, you can use
+
+```ruby
+
+# frozen_string_literal: true
+
+class CheckUsersActivityJob < ActiveJob::Base
+  include ChainedJob::Middleware
+
+  def handle_retry
+    true
+  end
+end
+```
+
 ## Development
 
 For running tests use `bundle exec rake test`.
