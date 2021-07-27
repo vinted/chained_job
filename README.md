@@ -129,7 +129,7 @@ In case you want that during exception your arguments would be pushed back to Re
 class CheckUsersActivityJob < ActiveJob::Base
   include ChainedJob::Middleware
 
-  def handle_retry
+  def handle_retry?
     true
   end
 end
