@@ -35,7 +35,7 @@ module ChainedJob
     private
 
     def handle_retry?
-      job_instance.methods.include?('handle_retry') && job_instance.handle_retry
+      job_instance.methods.include?('handle_retry?') && job_instance.handle_retry?
     end
 
     def with_hooks
