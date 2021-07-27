@@ -43,8 +43,7 @@ class ChainedJob::ProcessTest < Minitest::Test
       raise(RuntimeError, 'Service temporary timeout error')
     end
 
-    job_instance.expect(:methods, ['handle_retry?'])
-    job_instance.expect(:handle_retry?, true)
+    job_instance.expect(:try, true, [:handle_retry?])
 
     assert_raises RuntimeError do
       tested_class.run({}, job_instance, job_instance.class, 1, DEFAULT_JOB_TAG)
@@ -69,8 +68,7 @@ class ChainedJob::ProcessTest < Minitest::Test
       raise(RuntimeError, 'Service temporary timeout error')
     end
 
-    job_instance.expect(:methods, ['handle_retry?'])
-    job_instance.expect(:handle_retry?, true)
+    job_instance.expect(:try, true, [:handle_retry?])
 
     assert_raises RuntimeError do
       tested_class.run({}, job_instance, job_instance.class, 1, DEFAULT_JOB_TAG)
@@ -95,8 +93,7 @@ class ChainedJob::ProcessTest < Minitest::Test
       raise(RuntimeError, 'Service temporary timeout error')
     end
 
-    job_instance.expect(:methods, ['handle_retry?'])
-    job_instance.expect(:handle_retry?, true)
+    job_instance.expect(:try, true, [:handle_retry?])
 
     assert_raises RuntimeError do
       tested_class.run({}, job_instance, job_instance.class, 1, DEFAULT_JOB_TAG)
