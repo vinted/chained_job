@@ -15,5 +15,9 @@ module ChainedJob
     def tag_list(prefix)
       "#{prefix}:tags"
     end
+
+    def serialize(arguments)
+      arguments.map { |argument| Marshal.dump(argument) }
+    end
   end
 end
