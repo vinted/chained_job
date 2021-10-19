@@ -21,6 +21,7 @@ module ChainedJob
     def run
       with_hooks do
         return finished_worker unless argument
+
         begin
           job_instance.process(argument)
         rescue StandardError, Sidekiq::Shutdown => e
