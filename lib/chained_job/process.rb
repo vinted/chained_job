@@ -19,20 +19,31 @@ module ChainedJob
     end
 
     def run
+      return run_with_retry if handle_retry?
+
+      with_hooks do
+        return finished_worker unless argument
+
+        job_instance.process(argument)
+        job_instance.class.perform_later(args, worker_id, job_tag)
+      end
+    end
+
+    private
+
+    def run_with_retry
       with_hooks do
         return finished_worker unless argument
 
         begin
           job_instance.process(argument)
         rescue StandardError, Sidekiq::Shutdown => e
-          push_job_arguments_back if handle_retry?
+          push_job_arguments_back
           raise e
         end
         job_instance.class.perform_later(args, worker_id, job_tag)
       end
     end
-
-    private
 
     def handle_retry?
       job_instance.try(:handle_retry?)
