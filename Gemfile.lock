@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    chained_job (0.8.0)
+    chained_job (0.8.1)
 
 GEM
   remote: https://rubygems.org/
@@ -23,4 +23,4 @@ DEPENDENCIES
   rake (~> 12.0)
 
 BUNDLED WITH
-   2.2.32
+   2.2.33
