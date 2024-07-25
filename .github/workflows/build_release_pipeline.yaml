@@ -9,7 +9,7 @@ on:
 jobs:
   build-release-pipeline:
     runs-on: ubuntu-latest
-    container: ruby:2.7.2
+    container: ruby:3.0.4
     steps:
       - uses: actions/checkout@v2
       - name: Setup
