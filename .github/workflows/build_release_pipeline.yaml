@@ -18,7 +18,7 @@ jobs:
           bundle install
 
       - name: Test
-        run: bundle exec rake
+        run: bundle exec rspec
 
       - name: Build
         id: build
