@@ -6,10 +6,23 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    minitest (5.15.0)
+    diff-lcs (1.5.1)
     mock_redis (0.30.0)
       ruby2_keywords
     rake (12.3.3)
+    rspec (3.13.0)
+      rspec-core (~> 3.13.0)
+      rspec-expectations (~> 3.13.0)
+      rspec-mocks (~> 3.13.0)
+    rspec-core (3.13.0)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-support (3.13.1)
     ruby2_keywords (0.0.5)
 
 PLATFORMS
@@ -18,9 +31,9 @@ PLATFORMS
 DEPENDENCIES
   bundler
   chained_job!
-  minitest (~> 5.0)
   mock_redis
   rake (~> 12.0)
+  rspec
 
 BUNDLED WITH
    2.2.33
