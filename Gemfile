@@ -6,5 +6,6 @@ gemspec
 
 group :test do
   gem 'mock_redis'
+  gem 'rubocop'
   gem 'rspec'
 end
