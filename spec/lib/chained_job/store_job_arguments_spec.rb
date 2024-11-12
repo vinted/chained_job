@@ -10,14 +10,9 @@ RSpec.describe ChainedJob::StoreJobArguments, '.run' do
   let(:serialized_arguments) { ChainedJob::Helpers.serialize(array_of_job_arguments) }
 
   it 'stores keys in redis' do
-    expect(ChainedJob.redis).to receive(:rpush).with(instance_of(String), serialized_arguments)
-    expect(ChainedJob.redis).to receive(:expire)
-
-    subject
-  end
-
-  it 'sets tag in a list' do
-    expect(ChainedJob.redis).to receive(:sadd).with(instance_of(String), job_tag)
+    expect(ChainedJob.redis).to receive(:call).with(:sadd, instance_of(String), job_tag)
+    expect(ChainedJob.redis).to receive(:call).with(:rpush, instance_of(String), serialized_arguments)
+    expect(ChainedJob.redis).to receive(:call).with(:expire, instance_of(String), instance_of(Integer))
 
     subject
   end

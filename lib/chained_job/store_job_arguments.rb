@@ -20,16 +20,16 @@ module ChainedJob
       set_tag_list
 
       array_of_job_arguments.each_slice(config.arguments_batch_size) do |sublist|
-        ChainedJob.redis.rpush(redis_key, Helpers.serialize(sublist))
+        ChainedJob.redis.call(:rpush, redis_key, Helpers.serialize(sublist))
       end
 
-      ChainedJob.redis.expire(redis_key, config.arguments_queue_expiration)
+      ChainedJob.redis.call(:expire, redis_key, config.arguments_queue_expiration)
     end
 
     private
 
     def set_tag_list
-      ChainedJob.redis.sadd(tag_list, job_tag)
+      ChainedJob.redis.call(:sadd, tag_list, job_tag)
     end
 
     def tag_list

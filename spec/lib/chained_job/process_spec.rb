@@ -8,7 +8,7 @@ RSpec.describe ChainedJob::Process, '.run' do
     double(
       process: ->() {},
       class: double(perform_later: ->(args, worker_id, job_tag) {}),
-      try: ->(method_name) { handle_retry? },
+      try: handle_retry?
     )
   end
   let(:job_arguments_key) { 'DummyJob' }
@@ -20,7 +20,7 @@ RSpec.describe ChainedJob::Process, '.run' do
   let(:handle_retry?) { false }
 
   before do
-    ChainedJob.redis.rpush(redis_key, serialized_array_of_arguments)
+    ChainedJob.redis.call(:rpush, redis_key, serialized_array_of_arguments)
   end
 
   it 'process argument and enqueues job' do
@@ -44,20 +44,20 @@ RSpec.describe ChainedJob::Process, '.run' do
     before { allow(job_instance).to receive(:process).and_raise('Runtime error') }
 
     it 'raises error' do
-      expect(job_instance.class).not_to receive(:perform_later).with(args, worker_id, job_tag)
+      expect(job_instance.class).not_to receive(:perform_later)
 
       expect { subject }.to raise_error('Runtime error')
+
+      expect([ChainedJob.redis.call(:lpop, redis_key)]).not_to eq(serialized_array_of_arguments)
     end
 
     context 'when handle retry is enabled' do
       let(:handle_retry?) { true }
 
       it 'pushes argument back and raises error' do
-        expect(ChainedJob.redis)
-          .to receive(:rpush)
-          .with(redis_key, ChainedJob::Helpers.serialize([101]))
-
         expect { subject }.to raise_error('Runtime error')
+
+        expect([ChainedJob.redis.call(:lpop, redis_key)]).to eq(serialized_array_of_arguments)
       end
     end
   end
