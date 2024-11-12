@@ -53,10 +53,9 @@ RSpec.describe ChainedJob::Process, '.run' do
       let(:handle_retry?) { true }
 
       it 'pushes argument back and raises error' do
-        # Temporarily commenting this out
-        # expect(ChainedJob.redis)
-        #   .to receive(:call)
-        #   .with(:rpush, redis_key, ChainedJob::Helpers.serialize([101])).and_call_original
+        expect(ChainedJob.redis)
+          .to receive(:call)
+          .with(:rpush, redis_key, ChainedJob::Helpers.serialize([101])).and_call_original
 
         # subject
         expect { subject }.to raise_error('Runtime error')
