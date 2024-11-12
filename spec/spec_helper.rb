@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'chained_job'
-require 'mock_redis'
 require 'testcontainers/redis'
 require 'redis-client'
 
