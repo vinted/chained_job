@@ -39,7 +39,7 @@ ChainedJob.configure do |config|
   config.arguments_queue_expiration = 3 * 24 * 60 * 60 # 3 days
 
   # Error will be raised while running job if redis is not setup
-  config.redis = Svc.redis
+  config.redis = Svc.redis # redis-client
   config.logger = ::Logger.new(STDOUT)
 end
 ```

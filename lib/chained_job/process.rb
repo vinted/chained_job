@@ -71,7 +71,7 @@ module ChainedJob
     def serialized_argument
       return @serialized_argument if defined?(@serialized_argument)
 
-      @serialized_argument = ChainedJob.redis.lpop(redis_key)
+      @serialized_argument = ChainedJob.redis.call(:lpop, redis_key)
     end
 
     def redis_key
@@ -83,7 +83,7 @@ module ChainedJob
     end
 
     def push_job_arguments_back
-      ChainedJob.redis.rpush(redis_key, Helpers.serialize([argument]))
+      ChainedJob.redis.call(:rpush, redis_key, Helpers.serialize([argument]))
     end
   end
 end

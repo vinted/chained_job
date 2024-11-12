@@ -19,15 +19,15 @@ module ChainedJob
     # rubocop:disable Metrics/AbcSize
     def run
       loop do
-        tag = ChainedJob.redis.spop(tag_list)
+        tag = ChainedJob.redis.call(:spop, tag_list)
 
         break unless tag
 
         redis_key = Helpers.redis_key(job_key, tag)
-        size = ChainedJob.redis.llen(redis_key)
-        (size / TRIM_STEP_SIZE).times { ChainedJob.redis.ltrim(redis_key, 0, -TRIM_STEP_SIZE) }
+        size = ChainedJob.redis.call(:llen, redis_key)
+        (size / TRIM_STEP_SIZE).times { ChainedJob.redis.call(:ltrim, redis_key, 0, -TRIM_STEP_SIZE) }
 
-        ChainedJob.redis.del(redis_key)
+        ChainedJob.redis.call(:del, redis_key)
       end
     end
     # rubocop:enable Metrics/AbcSize

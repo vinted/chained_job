@@ -2,16 +2,23 @@ PATH
   remote: .
   specs:
     chained_job (0.8.1)
+      redis-client
 
 GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.2)
+    connection_pool (2.4.1)
     diff-lcs (1.5.1)
+    docker-api (2.4.0)
+      excon (>= 0.64.0)
+      multi_json
+    excon (1.2.0)
     json (2.7.6)
     language_server-protocol (3.17.0.3)
     mock_redis (0.30.0)
       ruby2_keywords
+    multi_json (1.15.0)
     parallel (1.26.3)
     parser (3.3.6.0)
       ast (~> 2.4.1)
@@ -19,6 +26,8 @@ GEM
     racc (1.8.1)
     rainbow (3.1.1)
     rake (12.3.3)
+    redis-client (0.22.2)
+      connection_pool
     regexp_parser (2.9.2)
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
@@ -47,6 +56,10 @@ GEM
       parser (>= 3.3.1.0)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
+    testcontainers-core (0.2.0)
+      docker-api (~> 2.2)
+    testcontainers-redis (0.2.0)
+      testcontainers-core (~> 0.1)
     unicode-display_width (2.6.0)
 
 PLATFORMS
@@ -59,6 +72,7 @@ DEPENDENCIES
   rake (~> 12.0)
   rspec
   rubocop
+  testcontainers-redis
 
 BUNDLED WITH
    2.2.33

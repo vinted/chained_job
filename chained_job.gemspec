@@ -17,6 +17,7 @@ Gem::Specification.new do |spec|
   spec.executables = Dir.glob('bin/**/*').map { |path| path.gsub('bin/', '') }
   spec.require_paths = ['lib']
 
+  spec.add_dependency 'redis-client'
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake', '~> 12.0'
 end
