@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :test do
-  gem 'mock_redis'
+  gem 'testcontainers-redis'
   gem 'rubocop'
   gem 'rspec'
 end
